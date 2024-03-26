@@ -9,9 +9,12 @@ LLM for info bucketing:
 
 Speech-to-Text for dictation:
 - AssemblyAI vs Whisper vs Deepgram
-  - We should collect many voice recordings and run some correctness and speed tests
-- If we use whisper, there is also the optino of using whisper on machine models
-  - This would reduce costs but require testing to see how much accuracy is lost using smaller models.
+  - We should collect many voice recordings and run some correctness and speed
+    tests
+- If we use whisper, there is also the optino of using whisper on machine
+  models
+  - This would reduce costs but require testing to see how much accuracy is
+    lost using smaller models.
 
 """
 
@@ -23,6 +26,7 @@ import pyaudio
 import wave
 from pydub import AudioSegment
 
+
 def record_audio():
     chunk = 1024  # Record in chunks of 1024 samples
     sample_format = pyaudio.paInt16  # 16 bits per sample
@@ -33,13 +37,15 @@ def record_audio():
 
     p = pyaudio.PyAudio()  # Create an interface to PortAudio
 
-    print('Recording')
+    print("Recording")
 
-    stream = p.open(format=sample_format,
-                    channels=channels,
-                    rate=fs,
-                    frames_per_buffer=chunk,
-                    input=True)
+    stream = p.open(
+        format=sample_format,
+        channels=channels,
+        rate=fs,
+        frames_per_buffer=chunk,
+        input=True,
+    )
 
     frames = []  # Initialize array to store frames
 
@@ -47,28 +53,27 @@ def record_audio():
         data = stream.read(chunk)
         frames.append(data)
 
-    # Stop and close the stream 
+    # Stop and close the stream
     stream.stop_stream()
     stream.close()
     # Terminate the PortAudio interface
     p.terminate()
 
-    print('Finished recording')
+    print("Finished recording")
 
     # Save the recorded data as a WAV file
-    wf = wave.open(filename, 'wb')
+    wf = wave.open(filename, "wb")
     wf.setnchannels(channels)
     wf.setsampwidth(p.get_sample_size(sample_format))
     wf.setframerate(fs)
-    wf.writeframes(b''.join(frames))
+    wf.writeframes(b"".join(frames))
     wf.close()
 
-    wf = AudioSegment.from_wav('output.wav')
-    wf.export('output.mp3', format='mp3')
+    wf = AudioSegment.from_wav("output.wav")
+    wf.export("output.mp3", format="mp3")
 
 
 def main():
-
     if len(sys.argv) > 2:
         print("Usage: python3 audio_to_events.py <mp3 file>")
         sys.exit(0)
@@ -93,7 +98,9 @@ def main():
         file=audio_file,
     )
 
-    note_transcription_with_date = "Note Date: " + file_creation_datetime + "\n" + note_transcription.text
+    note_transcription_with_date = (
+        "Note Date: " + file_creation_datetime + "\n" + note_transcription.text
+    )
 
     print(note_transcription_with_date)
 
