@@ -20,7 +20,7 @@ def main():
 
     test_files = os.listdir("test_files")
 
-    csv_file = open("failure_data_set.csv", "a")
+    csv_file = open("data_set.csv", "a")
     writer = csv.writer(csv_file, delimiter=",")
 
     for test_file in test_files:
